@@ -1,0 +1,79 @@
+---
+import { BlogPost, BlogFrontmatterSchema } from "scripts-ssr/types";
+
+export type Props = { post: BlogPost };
+
+const { url, frontmatter } = Astro.props.post;
+
+const { description, title, publishDate, tags, section } =
+    BlogFrontmatterSchema.parse(frontmatter);
+
+const dateString = publishDate.toLocaleDateString("en-GB", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+});
+---
+
+<section>
+    <a href={url}>
+        <div class="card">
+            <h2>{title}</h2>
+            <p>{description}</p>
+            <div class="footer">
+                <span class="date">{dateString}</span>
+                <span>·</span>
+                <span class="section">{section}</span>
+            </div>
+        </div>
+    </a>
+</section>
+
+<style lang="scss">
+    section {
+        background-color: var(--background-color);
+        display: inline-block;
+        border-radius: 8px;
+    }
+
+    a {
+        all: unset;
+        cursor: pointer;
+    }
+
+    h2 {
+        margin: 0;
+    }
+
+    .section {
+        background-color: var(--surface2);
+        border-radius: 10px;
+        padding: 0.3em 0.6em;
+    }
+
+    .card {
+        border-radius: 5px;
+        padding: 1.5rem 2rem;
+        box-shadow: var(--box-shadow);
+        transition: var(--box-shadow-transition);
+        transition-property: scale, box-shadow;
+
+        &:hover {
+            box-shadow: var(--box-shadow-stronger);
+        }
+    }
+
+    :global(.dark) {
+        section {
+            background-color: var(--surface2);
+        }
+
+        .section {
+            background-color: var(--background-color);
+        }
+    }
+
+    .footer {
+        font-size: smaller;
+    }
+</style>

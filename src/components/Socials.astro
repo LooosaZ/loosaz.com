@@ -1,0 +1,90 @@
+---
+import Email from "./Icons/Email.astro";
+import GitHub from "./Icons/GitHub.astro";
+import Bluesky from "./Icons/Bluesky.astro";
+import Social from "./Social.astro";
+import XTwitter from "./Icons/X-Twitter.astro";
+---
+
+<ul>
+    <Social>
+        <iframe
+            title="Discord user embed"
+            width="340"
+            height=120
+            frameborder="0"
+            sandbox="allow-scripts"
+            src="https://widgets.vendicated.dev/user?id=310099824777232394&theme=dark&banner=true&full-banner=false&rounded-corners=true&discord-icon=true&badges=false&guess-nitro=false&"
+        ></iframe>
+    </Social>
+    <Social
+        title="Github"
+        text="LooosaZ"
+        href="https://github.com/LooosaZ"
+    >
+        <GitHub slot="icon" />
+    </Social>
+    <Social
+        title="BlueSky"
+        text="@loosaz.pessoas.dev"
+        href="https://bsky.app/profile/loosaz.pessoas.dev"
+    >
+        <Bluesky slot="icon" />
+    </Social>
+    <Social
+        title="X/Twitter"
+        text="@LooosaZ"
+        href="https://twitter.com/LooosaZ"
+    >
+        <XTwitter slot="icon" />
+    </Social>
+    <Social
+        title="Email"
+        text="contatoloosaz@gmail.com"
+        href="mailto:LoosaZ%20<contatoloosaz@gmail.com>"
+    >
+        <Email slot="icon" />
+    </Social>
+</ul>
+
+<script>
+    import { getCurrentTheme } from "../scripts/themeRuntime";
+
+    const widget = document.querySelector(
+        "#discord-widget"
+    ) as HTMLIFrameElement;
+
+    const setWidgetTheme = () => {
+        const data = {
+            command: "setTheme",
+            theme: getCurrentTheme(),
+        };
+        widget.contentWindow!.postMessage(data, "*");
+        console.log("Posted", data);
+    };
+
+    if (getCurrentTheme() === "dark")
+        widget.src = widget.src.replace("theme=light", "theme=dark");
+
+    document.addEventListener("themechange", setWidgetTheme);
+</script>
+
+<style lang="scss">
+    ul {
+        list-style: none;
+        // the user agent padding is insane
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    iframe {
+        box-shadow: 0px 0px 0px 1px var(--color);
+        border-radius: 12px;
+    }
+
+    :global(.dark) iframe {
+        box-shadow: none;
+    }
+</style>

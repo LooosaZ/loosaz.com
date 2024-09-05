@@ -1,0 +1,29 @@
+---
+import { loadStrings } from "locales";
+import { SOURCE_CODE_URL } from "scripts-ssr/constants";
+import Link from "./Link.svelte";
+
+const t = await loadStrings(Astro.params.lang, true);
+---
+
+<footer>
+    <p>
+        {t("footer.message")}<span>&nbsp;•&nbsp;</span>
+        <Link href={SOURCE_CODE_URL}>{t("footer.sourceCode")}</Link>
+    </p>
+</footer>
+
+<style>
+    footer {
+        margin-top: auto;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    p {
+        font-weight: 300;
+        filter: brightness(80%);
+        font-size: 90%;
+    }
+</style>
