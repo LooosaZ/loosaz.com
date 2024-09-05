@@ -14,7 +14,7 @@ This is the source code for my personal website!
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+Inside your Astro project, you'll see the following folders and files:
 
 ```
 /
