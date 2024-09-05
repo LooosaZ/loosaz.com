@@ -26,7 +26,7 @@ export default {
     blog: {
         title: "LoosaZ's Blog",
         description: "Ninguém sabe como ta a mente do palhaço",
-        teehee: "I really wanna write something here at some point",
+        teehee: "One day I will yap in here, get ready.",
     },
     "404": {
         title: "404 Not Found",
