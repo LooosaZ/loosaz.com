@@ -14,9 +14,8 @@ export default {
         description: "read if cute",
         hello: "Hi, I'm <0>LoosaZ!</0>",
         about: "I'm a self-taught software developer and I study Cybersecurity, I enjoy doing Minecraft Mods",
-        about2: "I also like Discord clients and frontend stuff",
+        about2: "I also like Discord clients and frontend stuff.",
         socialsTitle: "You can check me out on a lot of places!",
-        friendsTitle: "Also check out my cute friends!",
     },
     contact: {
         title: "Contact me",
