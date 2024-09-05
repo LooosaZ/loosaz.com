@@ -13,7 +13,7 @@ export default {
         title: "LoosaZ's Site",
         description: "read if cute",
         hello: "Hi, I'm <0>LoosaZ!</0>",
-        about: "I'm a self-taught software developer and I study Cybersecurity, I enjoy doing Minecraft Mods for the Java edition.",
+        about: "I'm a self-taught software developer and I study Cybersecurity, I'm a minecraft hobbyist modder for the Java edition.",
         about2: "I also like modifications for Discord Clients and Server Management.",
         socialsTitle: "You can check me out on a lot of places!",
     },
