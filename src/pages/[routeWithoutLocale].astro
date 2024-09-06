@@ -3,7 +3,7 @@ import { redirectTo404 } from "scripts-ssr/utils";
 import parser from "accept-language-parser";
 import { Locales } from "../locales";
 
-const routes = ["contact", "blog"];
+const routes = ["about", "contact", "blog"];
 const route = Astro.params.routeWithoutLocale;
 if (!routes.includes(route!))
     return redirectTo404(Astro.url, Astro.request.headers);

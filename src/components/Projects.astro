@@ -1,0 +1,73 @@
+---
+import { SOURCE_CODE_URL } from "scripts-ssr/constants";
+import ProjectCard from "./ProjectCard.astro";
+import { getEnv } from "scripts-ssr/env";
+
+const repos = [
+    "https://api.github.com/repos/LooosaZ/tcustomitems",
+    "https://api.github.com/repos/LooosaZ/tvideoplayer",
+    "https://api.github.com/repos/duperez/moreSigns",
+    "https://api.github.com/repos/LooosaZ/Vencord-Reimagined-theme",
+    "https://api.github.com/repos/LooosaZ/Rainbow-Selfbot",
+    "https://api.github.com/repos/LooosaZ/hackmud_scripts",
+];
+
+const repoData = await Promise.all(
+    repos.map(async repo => {
+        const requestInit = {
+            headers: new Headers({
+                "User-Agent": SOURCE_CODE_URL,
+            }),
+        } satisfies RequestInit;
+
+        if (repo.includes("api.github.com")) {
+            const env = import.meta.env;
+
+            const token = getEnv(Astro.locals, env, "GITHUB_TOKEN");
+
+            requestInit.headers.set("Accept", "application/vnd.github.v3+json");
+            requestInit.headers.set("Authorization", `Bearer ${token}`);
+        }
+
+        return fetch(repo, requestInit)
+            .then(async r => {
+                if (!r.ok) {
+                    const e = await r.text().catch(() => "Unknown Error");
+                    throw new Error(
+                        `Failed to fetch repo info for ${repo}: ${r.status} ${r.statusText}\n${e}`
+                    );
+                }
+                return r.json();
+            })
+            .catch(e => {
+                console.error(e);
+                return null;
+            });
+    })
+);
+---
+
+<div>
+    {repoData.map(data => (data ? <ProjectCard {...data} /> : null))}
+</div>
+
+<style>
+    div {
+        --cols: 3;
+        display: grid;
+        grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+        gap: 0.75em;
+    }
+
+    @media screen and (max-width: 1400px) {
+        div {
+            --cols: 2;
+        }
+    }
+
+    @media screen and (max-width: 1000px) {
+        div {
+            --cols: 1;
+        }
+    }
+</style>

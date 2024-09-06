@@ -1,0 +1,27 @@
+---
+import CenteredBody from "components/CenteredBody.astro";
+import Projects from "components/Projects.astro";
+import TechStack from "components/TechStack.astro";
+import Layout from "layouts/Layout.astro";
+import { MINUTES, cache } from "scripts-ssr/cache";
+import { loadStrings } from "locales";
+import { redirectTo404 } from "scripts-ssr/utils";
+
+cache(Astro.response, 20 * MINUTES);
+
+const t = await loadStrings(Astro.params.lang);
+if (!t) return await redirectTo404(Astro.url, Astro.request.headers);
+---
+
+<Layout title={t("about.title")} description={t("about.description")}>
+    <CenteredBody margin="10%">
+        <h1>{t("about.title")}</h1>
+        <p>{t("about.intro")}</p>
+
+        <h2 id="tech-stack">{t("about.stack")}</h2>
+        <TechStack />
+
+        <h2 id="projects">{t("about.projects")}</h2>
+        <Projects />
+    </CenteredBody>
+</Layout>

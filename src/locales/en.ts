@@ -2,6 +2,7 @@ export default {
     name: "English",
     routes: {
         home: "Home",
+        about: "About",
         contact: "Contact",
         blog: "Blog",
     },
@@ -16,6 +17,13 @@ export default {
         about: "I'm a self-taught software developer and I study Cybersecurity, I'm a minecraft hobbyist modder for the Java edition.",
         about2: "I also like modifications for Discord Clients and Server Management.",
         socialsTitle: "You can check me out on a lot of places!",
+    },
+    about: {
+        title: "About me",
+        description: "Learn more about me and what I do",
+        intro: "I have been programming since early 2022 and have taught myself some languages and frameworks since. I like open-source projects!",
+        stack: "Tech Stack",
+        projects: "Projects",
     },
     contact: {
         title: "Contact me",

@@ -1,0 +1,134 @@
+---
+const stack = {
+    Backend: [
+        {
+            name: "Node.js",
+            url: "https://nodejs.dev",
+        },
+        {
+            name: "Java",
+            url: "https://www.java.com",
+        },
+        {
+            name: "Python",
+            url: "https://www.python.org",
+        },
+    ],
+
+    Frontend: [
+        {
+            name: "TypeScript",
+            url: "https://www.typescriptlang.org",
+        },
+        {
+            name: "SCSS",
+            url: "https://sass-lang.com",
+        },
+        {
+            name: "Astro",
+            url: "https://astro.build",
+        },
+        {
+            name: "React",
+            url: "https://react.dev",
+        },
+        {
+            name: "Svelte",
+            url: "https://svelte.dev",
+        },
+    ],
+
+    Native: [
+        {
+            name: "Android",
+            url: "https://www.android.com",
+        },
+        {
+            name: "Kotlin",
+            url: "https://kotlinlang.org",
+        },
+    ],
+
+    Databases: [
+        {
+            name: "PostgreSQL",
+            url: "https://www.postgresql.org",
+        },
+        {
+            name: "SQLite",
+            url: "https://www.sqlite.org",
+        },
+    ],
+
+    Linux: [
+        {
+            name: "Bash",
+            url: "https://www.gnu.org/software/bash",
+        },
+        {
+            name: "Debian",
+            url: "https://www.debian.org",
+        },
+        {
+            name: "Fedora",
+            url: "https://fedoraproject.org",
+        },
+    ],
+};
+---
+
+<div>
+    {
+        Object.entries(stack).map(([name, items]) => (
+            <section>
+                <h3>{name}</h3>
+                <div class="items">
+                    {items.map(({ name, url }) => (
+                        <a href={url}>
+                            <img
+                                src={`/assets/stack/${name.toLowerCase()}.svg`}
+                                title={name}
+                            />
+                        </a>
+                    ))}
+                </div>
+            </section>
+        ))
+    }
+</div>
+
+<style>
+    section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5em;
+        margin-bottom: 0.5em;
+    }
+
+    h3 {
+        display: inline-block;
+        margin: 0;
+        font-weight: normal;
+        min-width: 6em;
+        text-align: center;
+        background: var(--surface2);
+        padding: 0.5em;
+        border-radius: 9999px;
+    }
+
+    .items {
+        padding: 0.2em;
+    }
+
+    a {
+        all: unset;
+        cursor: pointer;
+    }
+
+    img {
+        height: 2em;
+        width: 2em;
+        object-fit: fill;
+    }
+</style>
