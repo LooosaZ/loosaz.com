@@ -8,11 +8,12 @@ export default {
     },
     footer: {
         message: "you're cute",
+        donate: "support me",
         sourceCode: "source code",
     },
     home: {
-        title: "LoosaZ's Site",
-        description: "read if cute",
+        title: "LoosaZ's Portfolio",
+        description: "Welsome to my portfolio!",
         hello: "Hi, I'm <0>LoosaZ!</0>",
         about: "I'm a self-taught software developer and I study Cybersecurity, I'm a minecraft hobbyist modder for the Java edition.",
         about2: "I also like modifications for Discord Clients and Server Management.",

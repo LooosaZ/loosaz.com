@@ -1,6 +1,6 @@
 ---
 import { loadStrings } from "locales";
-import { SOURCE_CODE_URL } from "scripts-ssr/constants";
+import { DONATE_LINK, SOURCE_CODE_URL } from "scripts-ssr/constants";
 import Link from "./Link.svelte";
 
 const t = await loadStrings(Astro.params.lang, true);
@@ -8,7 +8,10 @@ const t = await loadStrings(Astro.params.lang, true);
 
 <footer>
     <p>
-        {t("footer.message")}<span>&nbsp;•&nbsp;</span>
+        <Link href={DONATE_LINK}>{t("footer.donate")}</Link>
+        <span>&nbsp;•&nbsp;</span>
+        {t("footer.message")}
+        <span>&nbsp;•&nbsp;</span>
         <Link href={SOURCE_CODE_URL}>{t("footer.sourceCode")}</Link>
     </p>
 </footer>
