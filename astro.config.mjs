@@ -7,7 +7,7 @@ import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-    site: "https://loosaz.dev",
+    site: "https://looosaz.github.io",
     integrations: [sitemap(), svelte(), mdx()],
     output: "server",
     vite: {
