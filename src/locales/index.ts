@@ -38,6 +38,9 @@ export function defineLocale(strings: Unstricten<TransStrings>) {
 
 const LocaleStrings = {
     en: () => import("./en"),
+    br: () => import("./br"),
+    ru: () => import("./ru"),
+    es: () => import("./es"),
 };
 
 export const Locales = Object.keys(LocaleStrings);
