@@ -7,7 +7,7 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
     site: "https://looosaz.github.io",
     integrations: [sitemap(), svelte(), mdx()],
-    output: "static",
+    output: "hybrid",
     vite: {
         build: {
             sourcemap: true
