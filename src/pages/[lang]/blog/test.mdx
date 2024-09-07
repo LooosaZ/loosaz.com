@@ -10,6 +10,15 @@ publishDate: 2022-12-26T23:04:18.855Z
 ```js
 import owo from "foo";
 
+export async function getStaticPaths() {
+    return [
+        { params: { lang: 'en' } },
+        { params: { lang: 'es' } },
+        { params: { lang: 'br' } },
+        { params: { lang: 'ru' } },
+    ];
+}
+
 console.log(owo`owo`);
 ```
 
