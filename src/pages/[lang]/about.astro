@@ -7,6 +7,15 @@ import { MINUTES, cache } from "scripts-ssr/cache";
 import { loadStrings } from "locales";
 import { redirectTo404 } from "scripts-ssr/utils";
 
+export async function getStaticPaths() {
+    return [
+        { params: { lang: 'en' } },
+        { params: { lang: 'es' } },
+        { params: { lang: 'br' } },
+        { params: { lang: 'ru' } },
+    ];
+}
+
 cache(Astro.response, 20 * MINUTES);
 
 const t = await loadStrings(Astro.params.lang);
