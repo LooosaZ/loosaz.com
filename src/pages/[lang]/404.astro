@@ -4,8 +4,15 @@ export const prerender = true;
 import CenteredBody from "components/CenteredBody.astro";
 import Layout from "layouts/Layout.astro";
 
-import { loadStrings, getStaticPaths } from "locales";
-export { getStaticPaths };
+import { loadStrings } from "locales";
+export async function getStaticPaths() {
+    return [
+        { params: { lang: 'en' } },
+        { params: { lang: 'es' } },
+        { params: { lang: 'br' } },
+        { params: { lang: 'ru' } },
+    ];
+}
 
 const t = await loadStrings(Astro.params.lang, true);
 ---
