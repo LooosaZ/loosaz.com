@@ -3,13 +3,11 @@ import sitemap from '@astrojs/sitemap';
 import svelte from "@astrojs/svelte";
 import mdx from "@astrojs/mdx";
 
-import cloudflare from "@astrojs/cloudflare";
-
 // https://astro.build/config
 export default defineConfig({
     site: "https://looosaz.github.io",
     integrations: [sitemap(), svelte(), mdx()],
-    output: "hybrid",
+    output: "static",
     vite: {
         build: {
             sourcemap: true
@@ -18,5 +16,4 @@ export default defineConfig({
     markdown: {
         syntaxHighlight: "prism"
     },
-    adapter: cloudflare()
 });
