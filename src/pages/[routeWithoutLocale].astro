@@ -3,8 +3,19 @@ import { redirectTo404 } from "scripts-ssr/utils";
 import parser from "accept-language-parser";
 import { Locales } from "../locales";
 
+// Define static paths for dynamic routes
+export async function getStaticPaths() {
+    return [
+        { params: { lang: 'en' } },
+        { params: { lang: 'es' } },
+        { params: { lang: 'br' } },
+        { params: { lang: 'ru' } },
+    ];
+}
+
 const routes = ["about", "contact", "blog"];
 const route = Astro.params.routeWithoutLocale;
+
 if (!routes.includes(route!))
     return redirectTo404(Astro.url, Astro.request.headers);
 
