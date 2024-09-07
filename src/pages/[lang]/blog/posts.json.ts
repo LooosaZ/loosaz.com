@@ -1,6 +1,15 @@
 import type { APIContext, APIRoute } from "astro";
 import type { BlogPost } from "scripts-ssr/types";
 
+export async function getStaticPaths() {
+    return [
+        { params: { lang: 'en' } },
+        { params: { lang: 'es' } },
+        { params: { lang: 'br' } },
+        { params: { lang: 'ru' } },
+    ];
+}
+
 async function buildPostData(ctx: APIContext, req: () => Promise<BlogPost>) {
     const post = await req();
     const { description, publishDate, section, tags, title, updateDate } = post.frontmatter;
