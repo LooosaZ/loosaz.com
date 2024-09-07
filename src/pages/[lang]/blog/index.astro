@@ -9,7 +9,15 @@ import type { BlogPost } from "scripts-ssr/types";
 const posts = [] ?? (await Astro.glob<BlogPost>("./*.{md,mdx}"));
 
 import { loadStrings, getStaticPaths } from "locales";
-export { getStaticPaths };
+export async function getStaticPaths() {
+    return [
+        { params: { lang: 'en' } },
+        { params: { lang: 'es' } },
+        { params: { lang: 'br' } },
+        { params: { lang: 'ru' } },
+    ];
+}
+
 
 const t = await loadStrings(Astro.params.lang, true);
 ---
