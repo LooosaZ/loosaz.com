@@ -5,7 +5,7 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-    site: "https://looosaz.github.io",
+    site: "https://loosaz.com",
     integrations: [sitemap(), svelte(), mdx()],
     output: "static",
     vite: {
