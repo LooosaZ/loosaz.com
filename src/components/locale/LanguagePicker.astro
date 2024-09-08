@@ -20,6 +20,16 @@ const { lang } = Astro.params;
         }
     </details>
 </div>
+<script>
+    document.addEventListener('click', (e: MouseEvent) => {
+        const details = document.querySelector('details');
+        const target = e.target as Element; // astro is a bitch have to cast it into an element
+        if (details && !details.contains(target) && details.hasAttribute('open')) {
+            details.removeAttribute('open');
+        }
+    });
+</script>
+
 
 <style>
     div {
@@ -40,7 +50,7 @@ const { lang } = Astro.params;
     }
 
     details[open] {
-        transform: translateY(-29%);
+        transform: translateY(-11%);
         background: var(--surface2);
         border-radius: 6px;
     }
@@ -57,7 +67,7 @@ const { lang } = Astro.params;
         list-style: none;
         height: 24px;
     }
-    
+
     summary::-webkit-details-marker {
         display: none;
     }
