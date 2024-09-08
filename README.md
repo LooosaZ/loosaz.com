@@ -1,4 +1,4 @@
-# loosaz.com
+# [loosaz.com](https://loosaz.com/en/)
 
 This is the source code for my personal website!
 

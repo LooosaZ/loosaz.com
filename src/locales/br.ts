@@ -1,5 +1,5 @@
 export default {
-    name: "Português Brasileiro",
+    name: "Português",
     routes: {
         home: "Inicio",
         about: "Sobre",
@@ -15,10 +15,10 @@ export default {
         title: "Portfolio do LoosaZ",
         description: "Bem vindx ao meu portfolio!",
         hello: "Oi, me chamo <0>LoosaZ!</0>",
-        about: "Sou um desenvolvedor de software autodidata e estudo Cybersegurança. Faço mods para a edição Java do Minecraft.",
-        about2: "Eu também gosto de modificações para clientes do Discord e gerenciamento de servidores.",
+        about: "Sou um desenvolvedor de software autodidata e estudo Cybersegurança. Faço mods para o Minecraft Java Edition",
+        about2: "Eu também gosto de client mods para Discord e gerenciamento de servidores.",
         socialsTitle: "Você pode me encontrar em vários lugares!",
-        thanks: "Obrigado Bedji e Zyliatix, por me ajudarem na tradução!",
+        thanks: "Obrigado Bedji, Fleanyi e Zyliatix, por me ajudarem na tradução!",
     },
     about: {
         title: "Sobre mim",

@@ -18,7 +18,7 @@ export default {
         about: "Soy un desarrollador de software autodidacto y estudio Ciberseguridad. Soy un modder aficionado de Minecraft Java Edition.",
         about2: "Me gustan los mods para clientes de Discord y la gestión de servidores.",
         socialsTitle: "¡Puedes encontrarme en muchos lugares!",
-        thanks: "¡Gracias Bedji y Zyliatix, por la ayuda con la traducción!",
+        thanks: "¡Gracias Bedji, Fleanyi y Zyliatix, por la ayuda con la traducción!",
     },
     about: {
         title: "Sobre mí",

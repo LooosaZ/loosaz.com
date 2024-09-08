@@ -41,6 +41,7 @@ const LocaleStrings = {
     br: () => import("./br"),
     ru: () => import("./ru"),
     es: () => import("./es"),
+    de: () => import("./de"),
 };
 
 export const Locales = Object.keys(LocaleStrings);
