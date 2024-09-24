@@ -1,0 +1,79 @@
+---
+import Social from "./Social.astro";
+import Twitch from "./Icons/Twitch.astro";
+import Discord from "./Icons/Discord.astro"
+import YT from "./Icons/Youtube.astro"
+---
+
+<ul>
+    <Social
+        title="Twitch"
+        text="Riot Games"
+        href="https://www.twitch.tv/riotgames"
+    >
+        <Twitch slot="icon" />
+    </Social>
+    <Social
+    title="Youtube"
+    text="Lol Esports"
+    href="https://www.youtube.com/@lolesports"
+>
+    <YT slot="icon" />
+    </Social>
+    <Social
+        title="Twitch"
+        text="Pactw"
+        href="https://www.twitch.tv/peqitw"
+    >
+        <Twitch slot="icon" />
+    </Social>
+    <Social
+        title="Discord"
+        text="Arkanis"
+        href="https://discord.com/invite/arkanis"
+    >
+        <Discord slot="icon" />
+    </Social>
+</ul>
+
+<script>
+    import { getCurrentTheme } from "../scripts/themeRuntime";
+
+    const widget = document.querySelector(
+        "#discord-widget"
+    ) as HTMLIFrameElement;
+
+    const setWidgetTheme = () => {
+        const data = {
+            command: "setTheme",
+            theme: getCurrentTheme(),
+        };
+        widget.contentWindow!.postMessage(data, "*");
+        console.log("Posted", data);
+    };
+
+    if (getCurrentTheme() === "dark")
+        widget.src = widget.src.replace("theme=light", "theme=dark");
+
+    document.addEventListener("themechange", setWidgetTheme);
+</script>
+
+<style lang="scss">
+    ul {
+        list-style: none;
+        // the user agent padding is insane
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    iframe {
+        box-shadow: 0px 0px 0px 1px var(--color);
+        border-radius: 12px;
+    }
+
+    :global(.dark) iframe {
+        box-shadow: none;
+    }
+</style>

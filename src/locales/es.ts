@@ -24,6 +24,7 @@ export default {
         title: "Sobre mí",
         description: "Aprende más sobre mí y lo que hago",
         intro: "He estado programando desde principios de 2022 y he aprendido por mi cuenta algunos lenguajes y frameworks. ¡Me encantan los proyectos open-source!",
+        modding: "Modero algunos proyectos en Twitch/Youtube/Discord, puedes verlos aquí.",
         stack: "Tech Stack",
         projects: "Proyectos",
     },

@@ -2,6 +2,7 @@
 import CenteredBody from "components/CenteredBody.astro";
 import Projects from "components/Projects.astro";
 import TechStack from "components/TechStack.astro";
+import Modding from "components/Modding.astro"
 import Layout from "layouts/Layout.astro";
 import { MINUTES, cache } from "scripts-ssr/cache";
 import { loadStrings } from "locales";
@@ -27,6 +28,9 @@ if (!t) return await redirectTo404(Astro.url, Astro.request.headers);
     <CenteredBody margin="10%">
         <h1>{t("about.title")}</h1>
         <p>{t("about.intro")}</p>
+        <p>{t("about.modding")}</p>
+
+        <Modding class="socials" />
 
         <h2 id="tech-stack">{t("about.stack")}</h2>
         <TechStack />
