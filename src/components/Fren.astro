@@ -1,0 +1,39 @@
+---
+export interface Props {
+    name: string;
+    url: string;
+    avatarUrl: string; // Add avatarUrl prop
+}
+
+const { name, url, avatarUrl } = Astro.props;
+---
+
+<a href={url}>
+    <img title={name} src={avatarUrl} alt={`${name}`} />
+</a>
+
+<style lang="scss">
+    img {
+        height: 64px;
+        width: 64px;
+        border-radius: 50%;
+        border: 2px solid var(--color);
+
+        box-shadow: var(--box-shadow);
+        transition: 0.2s box-shadow var(--box-shadow-transition);
+    }
+
+    a {
+        text-decoration: none;
+
+        &:is(:hover, :focus) img {
+            box-shadow: var(--box-shadow-stronger);
+        }
+    }
+
+    :global(.dark) a:is(:hover, :focus) img {
+        box-shadow: 0 8px 15px var(--accent-semi-trans),
+        0 6px 6px var(--accent-semi-trans);
+        border-color: var(--accent);
+    }
+</style>

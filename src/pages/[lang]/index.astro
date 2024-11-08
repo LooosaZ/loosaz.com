@@ -6,6 +6,7 @@ import Layout from "layouts/Layout.astro";
 import Socials from "components/Socials.astro";
 
 import CenteredBody from "components/CenteredBody.astro";
+import Fren from "components/Fren.astro";
 
 import { loadStrings, getStaticPaths } from "locales";
 import Trans from "locales/Trans.astro";
@@ -34,10 +35,16 @@ const t = await loadStrings(Astro.params.lang, true);
             <h2>{t("home.socialsTitle")}</h2>
             <Socials class="socials" />
         </section>
-        <section>
-            <h2>{t("home.thanks")}</h2>
+
+        <section id="friends">
+            <h2>{t("home.friendsTitle")}</h2>
+            <div id="frens">
+                <Fren name="fleanyi" url="https://twitter.com/fleanyi" avatarUrl="https://pbs.twimg.com/profile_images/1780678344599654401/BhUcFnML_400x400.jpg" />
+                <Fren name="Zyliatix" url="https://twitter.com/typhomijo" avatarUrl="https://pbs.twimg.com/profile_images/1631829972137525248/F2fHqgCj_400x400.jpg" />
+                <Fren name="Bedji" url="https://www.tumblr.com/b3dji" avatarUrl="https://64.media.tumblr.com/0a14d27b74f5f13f105387d5e34f0a42/c2df978fab775f9d-db/s96x96u_c1/2e8d0908e584c74eea1738b46ac6d71fe99363c3.pnj" />
+            </div>
         </section>
-        <Thanks class="socials" />
+
     </CenteredBody>
 </Layout>
 

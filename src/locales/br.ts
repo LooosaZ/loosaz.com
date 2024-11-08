@@ -13,12 +13,12 @@ export default {
     },
     home: {
         title: "Portfolio do LoosaZ",
-        description: "Bem vindx ao meu portfolio!",
+        description: "Bem vinde ao meu portfolio!",
         hello: "Oi, me chamo <0>LoosaZ!</0>",
         about: "Sou um desenvolvedor de software autodidata e estudo Cybersegurança. Faço mods para o Minecraft Java Edition",
-        about2: "Eu também gosto de client mods para Discord e gerenciamento de servidores.",
+        about2: "Eu também gosto de mods para o Discord e gerenciamento de servidores.",
         socialsTitle: "Você pode me encontrar em vários lugares!",
-        thanks: "Obrigado Bedji, Fleanyi e Zyliatix, por me ajudarem na tradução!",
+        friendsTitle: "Vai dar um alô pros tradutores!",
     },
     about: {
         title: "Sobre mim",
