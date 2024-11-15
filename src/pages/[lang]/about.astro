@@ -28,12 +28,13 @@ if (!t) return await redirectTo404(Astro.url, Astro.request.headers);
     <CenteredBody margin="10%">
         <h1>{t("about.title")}</h1>
         <p>{t("about.intro")}</p>
-        <p>{t("about.modding")}</p>
-
-        <Modding class="socials" />
 
         <h2 id="tech-stack">{t("about.stack")}</h2>
         <TechStack />
+
+        <p>{t("about.modding")}</p>
+
+        <Modding class="socials" />
 
         <h2 id="projects">{t("about.projects")}</h2>
         <Projects />
