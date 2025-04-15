@@ -18,7 +18,7 @@ export default {
         about: "Sou um desenvolvedor de software autodidata e estudo Cybersegurança. Faço mods para o Minecraft Java Edition",
         about2: "Eu também gosto de mods para o Discord e gerenciamento de servidores.",
         socialsTitle: "Você pode me encontrar em vários lugares!",
-        friendsTitle: "Vai dar um alô pros tradutores!",
+        friendsTitle: "Empresas com as quais fiz parcerias:",
     },
     about: {
         title: "Sobre mim",

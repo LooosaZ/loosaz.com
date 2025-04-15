@@ -18,7 +18,7 @@ export default {
         about: "Ich bin ein autodidaktischer Softwareentwickler und studiere Cybersecurity. Ich bin ein Minecraft-Hobbyist und Modder für die Java-Edition.",
         about2: "Außerdem mag ich Mods für Discord Clients und Server-Managment.",
         socialsTitle: "Du kannst mich auch hier finden!",
-        friendsTitle: "Sag Hallo für die Übersetzer!",
+        friendsTitle: "Unternehmen, mit denen ich zusammengearbeitet habe:",
     },
     about: {
         title: "Über mich",
