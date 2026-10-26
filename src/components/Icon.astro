@@ -1,0 +1,86 @@
+---
+interface Props {
+  name: string;
+  size?: number | string;
+  class?: string;
+  strokeWidth?: number;
+}
+
+const { name, size = "1em", class: className, strokeWidth = 1.75 } = Astro.props;
+
+const brandIcons = new Set([
+  "github",
+  "bluesky",
+  "x",
+  "twitch",
+  "youtube",
+  "typescript",
+  "astro",
+  "react",
+  "svelte",
+  "sass",
+  "html5",
+  "css",
+  "nodedotjs",
+  "openjdk",
+  "python",
+  "android",
+  "kotlin",
+  "postgresql",
+  "sqlite",
+  "gnubash",
+  "debian",
+  "fedora",
+]);
+
+const isBrand = brandIcons.has(name);
+const dimension = typeof size === "number" ? `${size}px` : size;
+
+const paths: Record<string, string> = {
+  "arrow-up-right": '<path d="M7 17 17 7"/><path d="M8 7h9v9"/>',
+  "arrow-right": '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+  "arrow-down": '<path d="M12 5v14"/><path d="m6 13 6 6 6-6"/>',
+  "arrow-left": '<path d="M19 12H5"/><path d="m11 18-6-6 6-6"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.42 1.42"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+  moon: '<path d="M20.9 13.2A8.5 8.5 0 0 1 10.8 3.1a8.5 8.5 0 1 0 10.1 10.1Z"/>',
+  menu: '<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>',
+  close: '<path d="m6 6 12 12"/><path d="m18 6-12 12"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6 8.5-6"/>',
+  star: '<path d="m12 3.6 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"/>',
+  external: '<path d="M13 5h6v6"/><path d="M19 5 9 15"/><path d="M19 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 1.8"/>',
+  pin: '<path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7"/>',
+  sparkle: '<path d="M12 3c.6 4.7 4.3 8.4 9 9-4.7.6-8.4 4.3-9 9-.6-4.7-4.3-8.4-9-9 4.7-.6 8.4-4.3 9-9Z"/>',
+  code: '<path d="m8.5 8-4 4 4 4"/><path d="m15.5 8 4 4-4 4"/><path d="m13.5 5-3 14"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/>',
+  radio: '<circle cx="12" cy="12" r="2"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4"/><path d="M4.9 4.9a10 10 0 0 0 0 14.2"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h9"/>',
+};
+
+const path = paths[name];
+---
+
+{
+  isBrand ? (
+    <span
+      class:list={["icon", "icon--mask", className]}
+      style={`--size:${dimension};--icon:url(/icons/stack/${name}.svg)`}
+      aria-hidden="true"
+    />
+  ) : (
+    <svg
+      class:list={["icon", className]}
+      style={`--size:${dimension}`}
+      viewBox="0 0 24 24"
+      fill={name === "star" ? "currentColor" : "none"}
+      stroke={name === "star" ? "none" : "currentColor"}
+      stroke-width={strokeWidth}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <Fragment set:html={path ?? ""} />
+    </svg>
+  )
+}

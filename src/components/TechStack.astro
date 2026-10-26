@@ -1,134 +1,135 @@
 ---
-const stack = {
-    Backend: [
-        {
-            name: "Node.js",
-            url: "https://nodejs.dev",
-        },
-        {
-            name: "Java",
-            url: "https://www.java.com",
-        },
-        {
-            name: "Python",
-            url: "https://www.python.org",
-        },
-    ],
-
-    Frontend: [
-        {
-            name: "TypeScript",
-            url: "https://www.typescriptlang.org",
-        },
-        {
-            name: "SCSS",
-            url: "https://sass-lang.com",
-        },
-        {
-            name: "Astro",
-            url: "https://astro.build",
-        },
-        {
-            name: "React",
-            url: "https://react.dev",
-        },
-        {
-            name: "Svelte",
-            url: "https://svelte.dev",
-        },
-    ],
-
-    Native: [
-        {
-            name: "Android",
-            url: "https://www.android.com",
-        },
-        {
-            name: "Kotlin",
-            url: "https://kotlinlang.org",
-        },
-    ],
-
-    Databases: [
-        {
-            name: "PostgreSQL",
-            url: "https://www.postgresql.org",
-        },
-        {
-            name: "SQLite",
-            url: "https://www.sqlite.org",
-        },
-    ],
-
-    Linux: [
-        {
-            name: "Bash",
-            url: "https://www.gnu.org/software/bash",
-        },
-        {
-            name: "Debian",
-            url: "https://www.debian.org",
-        },
-        {
-            name: "Fedora",
-            url: "https://fedoraproject.org",
-        },
-    ],
-};
+import Icon from "@/components/Icon.astro";
+import { stack } from "@/data/site";
 ---
 
-<div>
-    {
-        Object.entries(stack).map(([name, items]) => (
-            <section>
-                <h3>{name}</h3>
-                <div class="items">
-                    {items.map(({ name, url }) => (
-                        <a href={url}>
-                            <img
-                                src={`/assets/stack/${name.toLowerCase()}.svg`}
-                                title={name}
-                            />
-                        </a>
-                    ))}
-                </div>
-            </section>
-        ))
-    }
+<div class="stack">
+  {
+    stack.map((group) => (
+      <section class="stack__group">
+        <header class="stack__head">
+          <h3>{group.title}</h3>
+          <span class="stack__count">{String(group.items.length).padStart(2, "0")}</span>
+        </header>
+        <ul class="stack__items">
+          {group.items.map((item) => (
+            <li class="stack__item">
+              {item.icon && <Icon name={item.icon} size={15} class="stack__icon" />}
+              {item.name}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
 </div>
 
 <style>
-    section {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 0.5em;
-        margin-bottom: 0.5em;
+  .stack {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  .stack__group {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    padding: 1.35rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: border-color 0.3s var(--ease), background-color 0.3s var(--ease);
+  }
+
+  .stack__group:nth-child(1),
+  .stack__group:nth-child(2) {
+    grid-column: span 3;
+  }
+
+  .stack__group:hover {
+    border-color: var(--line-strong);
+  }
+
+  .stack__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .stack__head h3 {
+    font-size: 0.9375rem;
+    letter-spacing: -0.02em;
+  }
+
+  .stack__count {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    color: var(--muted);
+  }
+
+  .stack__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+  }
+
+  .stack__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    font-weight: 450;
+    line-height: 1.3;
+    transition: color 0.25s var(--ease), border-color 0.25s var(--ease),
+      transform 0.25s var(--ease), background-color 0.25s var(--ease);
+  }
+
+  .stack__item:hover {
+    transform: translateY(-2px);
+    border-color: var(--line-strong);
+    background: var(--surface-strong);
+    color: var(--ink);
+  }
+
+  .stack__icon {
+    color: var(--accent-text);
+  }
+
+  @media (max-width: 900px) {
+    .stack {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    h3 {
-        display: inline-block;
-        margin: 0;
-        font-weight: normal;
-        min-width: 6em;
-        text-align: center;
-        background: var(--surface2);
-        padding: 0.5em;
-        border-radius: 9999px;
+    .stack__group,
+    .stack__group:nth-child(1),
+    .stack__group:nth-child(2) {
+      grid-column: span 1;
     }
 
-    .items {
-        padding: 0.2em;
+    .stack__group:nth-child(5) {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .stack {
+      grid-template-columns: 1fr;
     }
 
-    a {
-        all: unset;
-        cursor: pointer;
+    .stack__group,
+    .stack__group:nth-child(1),
+    .stack__group:nth-child(2),
+    .stack__group:nth-child(5) {
+      grid-column: span 1;
     }
-
-    img {
-        height: 2em;
-        width: 2em;
-        object-fit: fill;
-    }
+  }
 </style>

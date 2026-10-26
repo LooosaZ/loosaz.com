@@ -1,21 +1,78 @@
 ---
-export const prerender = true;
-import { Locales } from "locales";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/components/Icon.astro";
 ---
 
-<!doctype html>
-<html>
-    <noscript>
-        <meta http-equiv="refresh" content="0; URL=/en/404" />
-    </noscript>
+<BaseLayout
+  title="Off air"
+  description="This page doesn't exist. The stream is off air."
+  noindex
+>
+  <section class="not-found">
+    <div class="container not-found__inner">
+      <p class="eyebrow">404 · Off air</p>
+      <p class="not-found__code" aria-hidden="true">404</p>
+      <h1>This channel is <em>off air.</em></h1>
+      <p class="lead">
+        The page you're looking for moved, got deleted, or never made it past
+        rehearsal. Let's get you back to something live.
+      </p>
+      <div class="btn-row not-found__actions">
+        <a class="btn" href="/">
+          Back home
+          <Icon name="arrow-left" size={16} />
+        </a>
+        <a class="btn btn--ghost" href="/projects">
+          See projects
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
 
-    <script define:vars={{ Locales }}>
-        const lang =
-            navigator.languages
-                .find(l => Locales.includes(l.split("-")[0]))
-                ?.split("-")[0] || "en";
+<style>
+  .not-found {
+    padding-block: clamp(4rem, 12vw, 9rem);
+    overflow: clip;
+  }
 
-        window.location.replace(`/${lang}/404`);
-    </script>
+  .not-found__inner {
+    position: relative;
+    max-width: 44rem;
+  }
 
-</html>
+  .not-found::before {
+    content: "";
+    position: absolute;
+    top: 10%;
+    right: 0;
+    width: 40rem;
+    max-width: 80vw;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-soft), transparent 68%);
+    pointer-events: none;
+  }
+
+  .not-found__code {
+    margin-block: 0.5rem -0.35em;
+    color: var(--accent-text);
+    font-size: clamp(7rem, 20vw, 14rem);
+    font-weight: 600;
+    line-height: 0.8;
+    letter-spacing: -0.08em;
+    opacity: 0.16;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .not-found h1 {
+    margin-bottom: 1.25rem;
+    font-size: clamp(2.6rem, 6vw, 4.75rem);
+  }
+
+  .not-found__actions {
+    margin-top: 2rem;
+  }
+</style>

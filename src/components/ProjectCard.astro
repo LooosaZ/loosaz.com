@@ -1,143 +1,302 @@
 ---
-import { getLanguageColor } from "scripts-ssr/languageColors";
-import OpenExternalIcon from "./Icons/OpenExternalIcon.astro";
+import Icon from "@/components/Icon.astro";
+import { languageColors, type Project } from "@/data/projects";
 
-import Star from "./Icons/Star.astro";
+interface Props {
+  project: Project;
+  wide?: boolean;
+  index?: number;
+}
 
-const {
-    name,
-    description,
-    language,
-    owner,
-    stars_count,
-    stargazers_count,
-    html_url,
-} = Astro.props;
-
-const starCount = stars_count ?? stargazers_count;
-const stars =
-    starCount > 1000 ? `${(starCount / 1000).toFixed(1)}k` : starCount;
-
-const avatarUrl = new URL(owner.avatar_url);
-avatarUrl.searchParams.set("size", "64");
+const { project, wide = false, index } = Astro.props;
+const color = languageColors[project.language] ?? "var(--accent)";
+const owner = project.owner ?? "LooosaZ";
+const initial = project.name.replace(/[^a-zA-Z]/g, "").charAt(0).toUpperCase();
+const number = index !== undefined ? String(index + 1).padStart(2, "0") : null;
 ---
 
-<a href={html_url}>
-    <span class="open-external">
-        <OpenExternalIcon />
+<a
+  class:list={["project", { "project--wide": wide }]}
+  href={project.url}
+  target="_blank"
+  rel="noopener noreferrer"
+  style={`--lang:${color}`}
+  data-spotlight
+  aria-label={`${project.name} on GitHub (opens in a new tab)`}
+>
+  <div class="project__cover" aria-hidden="true">
+    <span class="project__repo">
+      {number && <span class="project__number">{number}</span>}
+      {owner}/{project.slug}
     </span>
+    <span class="project__mono">{initial}</span>
+    <span class="project__arrow">
+      <Icon name="arrow-up-right" size={16} />
+    </span>
+  </div>
 
-    <div class="author">
-        <img src={avatarUrl.toString()} alt="" />
-        <span>{owner.login}</span>
+  <div class="project__body">
+    <div class="project__meta">
+      <span class="project__lang">
+        <span class="project__dot"></span>
+        {project.language}
+      </span>
+      {project.contribution && <span class="project__flag">Contribution</span>}
+      {project.archived && <span class="project__flag">Archived</span>}
+      <span class="project__stars">
+        <Icon name="star" size={11} />
+        {project.stars}
+        <span class="sr-only">GitHub stars</span>
+      </span>
     </div>
 
-    <h3>{name}</h3>
-    <span class="description">{description}</span>
+    <h3 class="project__title">{project.name}</h3>
+    <p class="project__description">{project.description}</p>
 
-    <div class="info">
-        <span
-            class="language"
-            style={`--lang-color: ${getLanguageColor(language)};`}
-        >
-            {language}
-        </span>
-        <div class="stars">
-            <Star />
-            <span>{stars}</span>
-        </div>
-    </div>
+    <ul class="project__tags" aria-label="Technologies">
+      {project.tags.map((tag) => <li class="tag">{tag}</li>)}
+    </ul>
+  </div>
 </a>
 
-<style lang="scss">
-    a {
-        all: unset;
-        cursor: pointer;
+<style>
+  .project {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: border-color 0.35s var(--ease), transform 0.35s var(--ease),
+      box-shadow 0.35s var(--ease);
+  }
 
-        position: relative;
-        background: var(--surface2);
-        border: 1px solid var(--color-semi-trans);
-        padding: 1em;
-        border-radius: 8px;
-        display: grid;
+  .project::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      22rem circle at var(--mx, 50%) var(--my, 0%),
+      color-mix(in oklab, var(--lang) 10%, transparent),
+      transparent 65%
+    );
+    transition: opacity 0.4s var(--ease);
+  }
 
-        transition: 200ms box-shadow var(--box-shadow-transition),
-            200ms background;
+  .project:hover {
+    transform: translateY(-4px);
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .project:hover::after {
+    opacity: 1;
+  }
+
+  .project__cover {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 9.5rem;
+    padding: 1rem 1.15rem;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background:
+      radial-gradient(
+        130% 140% at 12% -10%,
+        color-mix(in oklab, var(--lang) 38%, var(--surface)) 0%,
+        transparent 62%
+      ),
+      radial-gradient(
+        100% 120% at 100% 120%,
+        color-mix(in oklab, var(--lang) 18%, var(--surface)) 0%,
+        transparent 60%
+      ),
+      var(--surface-strong);
+  }
+
+  .project__cover::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 26px 26px;
+    opacity: 0.55;
+    mask-image: linear-gradient(140deg, #000 0%, transparent 78%);
+    -webkit-mask-image: linear-gradient(140deg, #000 0%, transparent 78%);
+  }
+
+  .project__repo {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: calc(100% - 3rem);
+    overflow: hidden;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .project__number {
+    display: inline-grid;
+    place-items: center;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 0.5625rem;
+  }
+
+  .project__mono {
+    position: absolute;
+    right: 1rem;
+    bottom: -0.22em;
+    font-size: clamp(6rem, 9vw, 8.5rem);
+    font-weight: 600;
+    letter-spacing: -0.08em;
+    line-height: 0.75;
+    color: color-mix(in oklab, var(--lang) 62%, var(--ink));
+    opacity: 0.2;
+    transform: skewX(-4deg);
+    transition: transform 0.6s var(--ease), opacity 0.4s var(--ease);
+  }
+
+  .project:hover .project__mono {
+    transform: skewX(-4deg) translate(-0.04em, -0.04em) scale(1.04);
+    opacity: 0.36;
+  }
+
+  .project__arrow {
+    position: relative;
+    z-index: 2;
+    display: inline-grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--surface) 75%, transparent);
+    color: var(--ink);
+    transition: background-color 0.3s var(--ease), color 0.3s var(--ease),
+      border-color 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+
+  .project:hover .project__arrow {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+    transform: rotate(45deg);
+  }
+
+  .project__body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.15rem 1.25rem 1.25rem;
+  }
+
+  .project__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 1.25rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.03em;
+  }
+
+  .project__lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .project__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--lang);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+  }
+
+  .project__flag {
+    padding: 0.05rem 0.35rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 0.5625rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .project__stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    margin-left: auto;
+    color: var(--ink-soft);
+  }
+
+  .project__title {
+    font-size: 1.3rem;
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
+  }
+
+  .project__description {
+    color: var(--muted);
+    font-size: 0.865rem;
+    line-height: 1.55;
+  }
+
+  .project__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: auto;
+    padding-top: 0.7rem;
+  }
+
+  .project--wide .project__cover {
+    height: 12.5rem;
+  }
+
+  .project--wide .project__body {
+    padding: 1.4rem 1.5rem 1.5rem;
+  }
+
+  .project--wide .project__title {
+    font-size: clamp(1.6rem, 2.4vw, 2rem);
+  }
+
+  .project--wide .project__description {
+    max-width: 34rem;
+    font-size: 0.94rem;
+  }
+
+  @media (max-width: 520px) {
+    .project__cover {
+      height: 8rem;
     }
 
-    a:is(:hover, :active) {
-        box-shadow: var(--box-shadow-stronger);
-        background: var(--surface);
+    .project--wide .project__cover {
+      height: 9rem;
     }
-
-    h3 {
-        margin: 0;
-    }
-
-    span {
-        font-size: 0.9em;
-    }
-
-    .description {
-        margin-top: 0.3em;
-        margin-bottom: 0.8em;
-    }
-
-    .author,
-    .info,
-    .stars {
-        display: flex;
-        align-items: center;
-    }
-
-    .author {
-        margin-bottom: 1em;
-    }
-
-    .author img {
-        width: 1.2em;
-        height: 1.2em;
-        border-radius: 50%;
-        margin-right: 0.3em;
-    }
-
-    .info {
-        line-height: 1.2em;
-    }
-
-    .stars :global(svg) {
-        width: 1.2em;
-        height: 1.2em;
-        transform: translateY(-0.05em);
-        margin-right: 0.1em;
-    }
-
-    .language {
-        margin-right: 0.6em;
-    }
-
-    .language::before {
-        content: "";
-        display: inline-block;
-        width: 0.8em;
-        height: 0.8em;
-        transform: translateY(0.05em);
-        border-radius: 50%;
-        background: var(--lang-color);
-    }
-
-    .open-external {
-        all: unset;
-        cursor: pointer;
-        color: var(--color-semi-trans);
-        position: absolute;
-        top: 1em;
-        right: 0.5em;
-        transition: 200ms color;
-    }
-
-    .open-external :global(svg) {
-        width: 1.2em;
-        height: 1.2em;
-    }
+  }
 </style>

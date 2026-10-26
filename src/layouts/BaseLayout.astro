@@ -1,0 +1,205 @@
+---
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { site } from "@/data/site";
+import "@/styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article" | "profile";
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description = site.description,
+  image = "/og.png",
+  type = "website",
+  noindex = false,
+  jsonLd,
+} = Astro.props;
+
+const pageTitle = title ? `${title} — ${site.name}` : site.title;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const socialImage = new URL(image, Astro.site ?? site.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/assets/avatar.jpg" />
+    <meta name="author" content={site.name} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0d0b" media="(prefers-color-scheme: dark)" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:creator" content="@LooosaZ" />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+
+    <script is:inline>
+      (() => {
+        try {
+          const query = new URLSearchParams(window.location.search).get("theme");
+          const stored = localStorage.getItem("theme");
+          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.theme =
+            query === "light" || query === "dark"
+              ? query
+              : stored === "light" || stored === "dark"
+                ? stored
+                : prefersDark
+                  ? "dark"
+                  : "light";
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      const root = document.documentElement;
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      const toggles = document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]");
+      const themeMeta = document.querySelector<HTMLMetaElement>(
+        'meta[name="theme-color"]:not([media])',
+      );
+
+      const applyTheme = (theme: "light" | "dark", persist = true) => {
+        root.dataset.theme = theme;
+        if (persist) {
+          try {
+            localStorage.setItem("theme", theme);
+          } catch {
+            /* storage unavailable */
+          }
+        }
+        toggles.forEach((toggle) => {
+          const next = theme === "dark" ? "light" : "dark";
+          toggle.setAttribute("aria-label", `Switch to ${next} theme`);
+          toggle.setAttribute("title", `Switch to ${next} theme`);
+        });
+        const color = getComputedStyle(root).getPropertyValue("--bg").trim();
+        if (themeMeta && color) themeMeta.content = color;
+      };
+
+      applyTheme(root.dataset.theme === "dark" ? "dark" : "light", false);
+
+      toggles.forEach((toggle) => {
+        toggle.addEventListener("click", () => {
+          applyTheme(root.dataset.theme === "dark" ? "light" : "dark");
+        });
+      });
+
+      media.addEventListener("change", (event) => {
+        let hasPreference = false;
+        try {
+          hasPreference = Boolean(localStorage.getItem("theme"));
+        } catch {
+          /* ignore */
+        }
+        if (!hasPreference) applyTheme(event.matches ? "dark" : "light", false);
+      });
+
+      // Header state
+      const header = document.querySelector<HTMLElement>("[data-header]");
+      if (header) {
+        const onScroll = () => {
+          header.classList.toggle("is-scrolled", window.scrollY > 12);
+        };
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+      }
+
+      // Mobile navigation
+      const navToggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+      const nav = document.querySelector<HTMLElement>("[data-nav]");
+
+      const setNav = (open: boolean) => {
+        if (!header || !navToggle) return;
+        header.classList.toggle("is-nav-open", open);
+        navToggle.setAttribute("aria-expanded", String(open));
+        document.body.style.overflow = open ? "hidden" : "";
+        if (open) {
+          nav?.querySelector<HTMLAnchorElement>("a")?.focus({ preventScroll: true });
+        }
+      };
+
+      if (navToggle) {
+        navToggle.addEventListener("click", () => {
+          setNav(navToggle.getAttribute("aria-expanded") !== "true");
+        });
+      }
+
+      nav?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => setNav(false));
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && header?.classList.contains("is-nav-open")) {
+          setNav(false);
+          navToggle?.focus();
+        }
+      });
+
+      // Reveal on scroll
+      const revealItems = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+        );
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
+
+      // Pointer spotlight for cards
+      document.querySelectorAll<HTMLElement>("[data-spotlight]").forEach((card) => {
+        card.addEventListener("pointermove", (event) => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty("--mx", `${event.clientX - rect.left}px`);
+          card.style.setProperty("--my", `${event.clientY - rect.top}px`);
+        });
+      });
+    </script>
+  </body>
+</html>

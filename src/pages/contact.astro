@@ -1,0 +1,440 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/components/Icon.astro";
+import { site, socials } from "@/data/site";
+
+const cards = socials.map((social) => ({
+  name: social.name,
+  handle: social.handle,
+  href: social.href,
+  icon: social.icon,
+  external: social.external ?? false,
+}));
+
+const notes = [
+  {
+    title: "Say what you're making",
+    body: "A short intro about the show, project or idea is plenty. Links are welcome.",
+  },
+  {
+    title: "Timeline & scope",
+    body: "When it needs to happen, and what's already in place. The more context, the better.",
+  },
+  {
+    title: "Budget, if relevant",
+    body: "A range is enough. If you're not sure yet, we can figure it out together.",
+  },
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with LoosaZ for broadcast work, web projects, collaborations or just to say hello."
+>
+  <section class="page-hero contact-hero">
+    <div class="container">
+      <div class="contact-hero__inner">
+        <div>
+          <p class="eyebrow">Contact</p>
+          <h1>Say <em>hello.</em></h1>
+          <p class="lead">
+            Whether it's a broadcast, a website, a collaboration or just a hello —
+            my inbox is open. I read everything, even if I'm slow to reply.
+          </p>
+
+          <a class="email" href={`mailto:${site.email}`}>
+            <span>{site.email}</span>
+            <span class="email__arrow">
+              <Icon name="arrow-up-right" size={22} />
+            </span>
+          </a>
+
+          <div class="contact-hero__meta">
+            <span class="availability"><span class="availability__dot"></span>{site.availability}</span>
+          </div>
+        </div>
+
+        <div class="contact-hero__card">
+          <img
+            src="/assets/avatar.jpg"
+            alt="LoosaZ's pixel-art avatar"
+            width="300"
+            height="300"
+            loading="eager"
+            decoding="async"
+          />
+          <div>
+            <p class="contact-hero__name">LoosaZ</p>
+            <p class="contact-hero__role">Global Broadcast Manager</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="socials-title">
+    <div class="container">
+      <div class="section-head section-head--compact">
+        <div>
+          <p class="eyebrow">Elsewhere</p>
+          <h2 id="socials-title" class="section-head__title">Find me <em>online.</em></h2>
+        </div>
+        <div class="section-head__aside">
+          <p>Socials, code and the occasional stream. Pick your poison.</p>
+        </div>
+      </div>
+
+      <ul class="social-grid">
+        {
+          cards.map((card) => (
+            <li>
+              <a
+                class="social-card"
+                href={card.href}
+                target={card.external ? "_blank" : undefined}
+                rel={card.external ? "me noopener noreferrer" : undefined}
+              >
+                <span class="social-card__top">
+                  <span class="social-card__icon">
+                    <Icon name={card.icon} size={19} />
+                  </span>
+                  <Icon name="arrow-up-right" size={15} class="social-card__arrow" />
+                </span>
+                <span class="social-card__name">{card.name}</span>
+                <span class="social-card__handle">{card.handle}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="notes-title">
+    <div class="container contact-notes">
+      <div class="contact-notes__intro">
+        <p class="eyebrow">Before you write</p>
+        <h2 id="notes-title">A few things that <em>help.</em></h2>
+        <p>
+          No formal brief needed — a few lines about what you have in mind is enough
+          to get started.
+        </p>
+      </div>
+
+      <ol class="notes">
+        {
+          notes.map((note, index) => (
+            <li>
+              <span class="notes__index">0{index + 1}</span>
+              <div>
+                <h3>{note.title}</h3>
+                <p>{note.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .contact-hero__inner > div:first-child {
+    max-width: 48rem;
+  }
+
+  .contact-hero h1 {
+    font-size: clamp(3.2rem, 8vw, 6rem);
+  }
+
+  .email {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--line-strong);
+    font-size: clamp(1.35rem, 3.8vw, 2.6rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.045em;
+    transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
+  }
+
+  .email__arrow {
+    display: inline-grid;
+    place-items: center;
+    width: 1.9em;
+    height: 1.9em;
+    flex: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink);
+    transition: background-color 0.3s var(--ease), color 0.3s var(--ease),
+      border-color 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+
+  .email:hover {
+    color: var(--accent-text);
+    border-color: var(--accent);
+  }
+
+  .email:hover .email__arrow {
+    transform: rotate(45deg);
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .contact-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.75rem;
+    color: var(--muted);
+  }
+
+  .availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .availability__dot {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2f9e44;
+  }
+
+  .availability__dot::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border: 1px solid #2f9e44;
+    border-radius: 50%;
+    opacity: 0.45;
+    animation: pulse 2.4s var(--ease) infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+
+  .contact-hero__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    width: 13rem;
+    padding: 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 1.2rem;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    transform: rotate(2deg);
+  }
+
+  .contact-hero__card img {
+    width: 100%;
+    border-radius: 0.75rem;
+    image-rendering: pixelated;
+  }
+
+  .contact-hero__card > div {
+    padding: 0 0.35rem 0.35rem;
+  }
+
+  .contact-hero__name {
+    font-size: 0.95rem;
+    font-weight: 550;
+    letter-spacing: -0.03em;
+  }
+
+  .contact-hero__role {
+    margin-top: 0.1rem;
+    color: var(--muted);
+    font-size: 0.7rem;
+    line-height: 1.4;
+  }
+
+  /* Socials --------------------------------------------------------------- */
+
+  .section-head--compact {
+    margin-bottom: 1.75rem;
+  }
+
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  .social-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-height: 9.5rem;
+    padding: 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: transform 0.3s var(--ease), border-color 0.3s var(--ease),
+      box-shadow 0.3s var(--ease);
+  }
+
+  .social-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow);
+  }
+
+  .social-card__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: auto;
+    padding-bottom: 1.25rem;
+  }
+
+  .social-card__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--line);
+    border-radius: 0.65rem;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  .social-card__arrow {
+    color: var(--muted);
+    transition: transform 0.3s var(--ease), color 0.3s var(--ease);
+  }
+
+  .social-card:hover .social-card__arrow {
+    transform: translate(2px, -2px);
+    color: var(--accent-text);
+  }
+
+  .social-card__name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .social-card__handle {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  /* Notes ----------------------------------------------------------------- */
+
+  .contact-notes {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .contact-notes__intro {
+    position: sticky;
+    top: 6.5rem;
+  }
+
+  .contact-notes h2 {
+    margin-block: 1rem 1.15rem;
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
+  }
+
+  .contact-notes__intro > p:last-child {
+    max-width: 26rem;
+    color: var(--muted);
+  }
+
+  .notes {
+    border-top: 1px solid var(--line);
+  }
+
+  .notes li {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .notes__index {
+    padding-top: 0.15rem;
+    color: var(--accent-text);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.05em;
+  }
+
+  .notes h3 {
+    font-size: 1.05rem;
+    letter-spacing: -0.025em;
+  }
+
+  .notes p {
+    margin-top: 0.3rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 900px) {
+    .contact-hero__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-hero__card {
+      display: none;
+    }
+
+    .contact-notes {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-notes__intro {
+      position: static;
+    }
+
+    .social-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 520px) {
+    .social-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .social-card {
+      min-height: 8rem;
+    }
+  }
+</style>

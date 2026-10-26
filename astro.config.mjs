@@ -1,19 +1,11 @@
-import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
-import svelte from "@astrojs/svelte";
-import mdx from "@astrojs/mdx";
+import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
 
-// https://astro.build/config
 export default defineConfig({
-    site: "https://loosaz.com",
-    integrations: [sitemap(), svelte(), mdx()],
-    output: "static",
-    vite: {
-        build: {
-            sourcemap: true
-        }
-    },
-    markdown: {
-        syntaxHighlight: "prism"
-    },
+  site: "https://loosaz.com",
+  trailingSlash: "ignore",
+  integrations: [sitemap()],
+  build: {
+    inlineStylesheets: "auto",
+  },
 });

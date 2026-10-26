@@ -1,0 +1,285 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/components/Icon.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import { categories, projects } from "@/data/projects";
+
+const sorted = [...projects].sort((a, b) => {
+  if (Boolean(a.featured) !== Boolean(b.featured)) return a.featured ? -1 : 1;
+  return b.stars - a.stars;
+});
+
+const categoryCounts = Object.fromEntries(
+  categories.map((category) => [
+    category,
+    category === "All"
+      ? projects.length
+      : projects.filter((project) => project.category === category).length,
+  ]),
+);
+---
+
+<BaseLayout
+  title="Projects"
+  description="Open-source projects by LoosaZ — Minecraft mods, security tools, themes and web experiments."
+>
+  <section class="page-hero">
+    <div class="container page-hero__inner">
+      <p class="eyebrow">Projects</p>
+      <h1>Things I've <em>built.</em></h1>
+      <p class="lead">
+        A mix of open-source tools, Minecraft mods, Discord themes and security
+        experiments. Everything is public — pick something apart, open an issue, or
+        just have a look around.
+      </p>
+      <div class="btn-row page-hero__actions">
+        <a
+          class="btn"
+          href="https://github.com/LooosaZ"
+          target="_blank"
+          rel="me noopener noreferrer"
+        >
+          <Icon name="github" size={16} />
+          All repositories
+        </a>
+        <a class="btn btn--ghost" href="/contact">
+          Work with me
+          <Icon name="arrow-up-right" size={15} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="project-list-title">
+    <div class="container">
+      <div class="projects-toolbar">
+        <div class="projects-toolbar__filters" role="group" aria-label="Filter projects">
+          {
+            categories.map((category) => (
+              <button
+                class:list={["filter", { "is-active": category === "All" }]}
+                type="button"
+                data-filter={category.toLowerCase()}
+                aria-pressed={category === "All" ? "true" : "false"}
+              >
+                {category}
+                <span class="filter__count">{categoryCounts[category]}</span>
+              </button>
+            ))
+          }
+        </div>
+        <p class="projects-toolbar__count" data-project-count>
+          {projects.length} projects
+        </p>
+      </div>
+
+      <h2 id="project-list-title" class="sr-only">All projects</h2>
+
+      <p class="sr-only" aria-live="polite" data-project-live></p>
+
+      <div class="projects-grid" data-projects-grid>
+        {
+          sorted.map((project, index) => (
+            <div
+              class="projects-grid__cell"
+              data-project
+              data-category={project.category.toLowerCase()}
+              data-reveal
+              style={`--reveal-delay:${Math.min(index, 8) * 45}ms`}
+            >
+              <ProjectCard project={project} index={index} />
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="projects-note">
+        <Icon name="sparkle" size={14} />
+        <p>
+          Projects marked <strong>Contribution</strong> live on another account.
+          Stars are a snapshot from when this page was last updated.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section--tight">
+    <div class="github-strip">
+      <div>
+        <p class="eyebrow">More to see</p>
+        <h2>There's always something <em>in progress.</em></h2>
+      </div>
+      <a
+        class="btn"
+        href="https://github.com/LooosaZ?tab=repositories"
+        target="_blank"
+        rel="me noopener noreferrer"
+      >
+        Browse GitHub
+        <Icon name="arrow-up-right" size={16} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero__actions {
+    margin-top: 2rem;
+  }
+
+  .projects-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.15rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .projects-toolbar__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    font-weight: 450;
+    line-height: 1.2;
+    transition: color 0.25s var(--ease), background-color 0.25s var(--ease),
+      border-color 0.25s var(--ease);
+  }
+
+  .filter:hover {
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .filter.is-active {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .filter__count {
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    opacity: 0.6;
+  }
+
+  .projects-toolbar__count {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.03em;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .projects-grid__cell {
+    min-width: 0;
+  }
+
+  .projects-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-top: 2rem;
+    padding: 1rem 1.15rem;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+
+  .projects-note :global(.icon) {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--accent-text);
+  }
+
+  .projects-note strong {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .github-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .github-strip h2 {
+    margin-top: 0.7rem;
+    font-size: clamp(1.6rem, 3vw, 2.35rem);
+  }
+
+  @media (max-width: 980px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .projects-toolbar {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  const filterButtons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+  const cards = document.querySelectorAll<HTMLElement>("[data-project]");
+  const count = document.querySelector<HTMLElement>("[data-project-count]");
+  const live = document.querySelector<HTMLElement>("[data-project-live]");
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const filter = button.dataset.filter ?? "all";
+
+      filterButtons.forEach((item) => {
+        const active = item === button;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+
+      let visible = 0;
+      cards.forEach((card) => {
+        const matches = filter === "all" || card.dataset.category === filter;
+        card.hidden = !matches;
+        if (matches) visible += 1;
+      });
+
+      if (count) {
+        count.textContent = filter === "all" ? `${visible} projects` : `${visible} shown`;
+      }
+      if (live) {
+        live.textContent = `${visible} ${visible === 1 ? "project" : "projects"} shown.`;
+      }
+    });
+  });
+</script>

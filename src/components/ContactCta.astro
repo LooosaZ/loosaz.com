@@ -1,0 +1,218 @@
+---
+import Icon from "@/components/Icon.astro";
+import { site, socials } from "@/data/site";
+
+const quickSocials = socials.filter((social) => social.icon !== "mail");
+---
+
+<section class="container section" aria-labelledby="contact-title">
+  <div class="contact-cta" data-reveal>
+    <div class="contact-cta__inner">
+      <p class="eyebrow contact-cta__eyebrow">Contact</p>
+      <h2 id="contact-title" class="contact-cta__title">
+        Got something worth<br />
+        <em>going live</em> for?
+      </h2>
+      <p class="contact-cta__copy">
+        Shows, websites, collaborations, or just a hello — my inbox is always open.
+      </p>
+
+      <div class="btn-row contact-cta__actions">
+        <a class="btn btn--accent" href={`mailto:${site.email}`}>
+          {site.email}
+          <Icon name="arrow-up-right" size={16} />
+        </a>
+        <a class="btn btn--ghost contact-cta__ghost" href="/contact">
+          More ways to reach me
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+
+      <div class="contact-cta__foot">
+        <span class="contact-cta__status">
+          <span class="contact-cta__dot"></span>
+          {site.availability}
+        </span>
+        <ul class="contact-cta__socials" aria-label="Social profiles">
+          {
+            quickSocials.map((social) => (
+              <li>
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="me noopener noreferrer"
+                  aria-label={social.name}
+                  title={social.name}
+                >
+                  <Icon name={social.icon} size={16} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <p class="contact-cta__mark" aria-hidden="true">hi.</p>
+  </div>
+</section>
+
+<style>
+  .contact-cta {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(2rem, 5vw, 4.5rem);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: var(--radius-lg);
+    background: #17130f;
+    color: #f7f1e6;
+    isolation: isolate;
+  }
+
+  .contact-cta::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -40%;
+    right: -15%;
+    width: min(40rem, 90%);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232, 72, 28, 0.5), transparent 65%);
+    filter: blur(20px);
+    pointer-events: none;
+  }
+
+  .contact-cta::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    opacity: 0.35;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(circle at 80% 0%, #000 0%, transparent 62%);
+    -webkit-mask-image: radial-gradient(circle at 80% 0%, #000 0%, transparent 62%);
+    pointer-events: none;
+  }
+
+  .contact-cta__inner {
+    position: relative;
+    z-index: 2;
+    max-width: 48rem;
+  }
+
+  .contact-cta__eyebrow {
+    color: rgba(247, 241, 230, 0.55);
+  }
+
+  .contact-cta__title {
+    margin-block: 1.25rem 1.1rem;
+    font-size: clamp(2.3rem, 5.6vw, 4.5rem);
+    letter-spacing: -0.05em;
+    line-height: 0.98;
+  }
+
+  .contact-cta__title em {
+    color: #ff7a54;
+  }
+
+  .contact-cta__copy {
+    max-width: 34rem;
+    color: rgba(247, 241, 230, 0.62);
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .contact-cta__actions {
+    margin-top: 2rem;
+  }
+
+  .contact-cta :global(.btn--ghost) {
+    --btn-fg: #f7f1e6;
+    --btn-border: rgba(247, 241, 230, 0.24);
+    --btn-bg: transparent;
+  }
+
+  .contact-cta :global(.btn--ghost:hover) {
+    --btn-bg: rgba(247, 241, 230, 0.08);
+    --btn-border: rgba(247, 241, 230, 0.5);
+  }
+
+  .contact-cta__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: clamp(2.25rem, 5vw, 3.5rem);
+    padding-top: 1.15rem;
+    border-top: 1px solid rgba(247, 241, 230, 0.13);
+  }
+
+  .contact-cta__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(247, 241, 230, 0.6);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .contact-cta__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #5fce7a;
+    box-shadow: 0 0 0 3px rgba(95, 206, 122, 0.16);
+  }
+
+  .contact-cta__socials {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .contact-cta__socials a {
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid rgba(247, 241, 230, 0.16);
+    border-radius: 999px;
+    color: rgba(247, 241, 230, 0.72);
+    transition: background-color 0.25s var(--ease), color 0.25s var(--ease),
+      border-color 0.25s var(--ease), transform 0.25s var(--ease);
+  }
+
+  .contact-cta__socials a:hover {
+    transform: translateY(-2px);
+    border-color: rgba(247, 241, 230, 0.45);
+    background: rgba(247, 241, 230, 0.1);
+    color: #fff;
+  }
+
+  .contact-cta__mark {
+    position: absolute;
+    right: clamp(1rem, 4vw, 3rem);
+    bottom: -0.28em;
+    z-index: 1;
+    font-size: clamp(7rem, 18vw, 15rem);
+    font-weight: 600;
+    line-height: 0.8;
+    letter-spacing: -0.08em;
+    color: rgba(247, 241, 230, 0.06);
+    transform: rotate(-6deg);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  @media (max-width: 600px) {
+    .contact-cta__mark {
+      display: none;
+    }
+  }
+</style>

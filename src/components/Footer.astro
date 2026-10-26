@@ -1,32 +1,313 @@
 ---
-import { loadStrings } from "locales";
-import { DONATE_LINK, SOURCE_CODE_URL } from "scripts-ssr/constants";
-import Link from "./Link.svelte";
+import Icon from "@/components/Icon.astro";
+import { nav, site, socials } from "@/data/site";
 
-const t = await loadStrings(Astro.params.lang, true);
+const year = new Date().getFullYear();
+const footerSocials = socials.filter((social) => social.icon !== "mail");
 ---
 
-<footer>
-    <p>
-        <Link href={DONATE_LINK}>{t("footer.donate")}</Link>
-        <span>&nbsp;•&nbsp;</span>
-        {t("footer.message")}
-        <span>&nbsp;•&nbsp;</span>
-        <Link href={SOURCE_CODE_URL}>{t("footer.sourceCode")}</Link>
-    </p>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="footer__logo" href="/" aria-label={`${site.name} — home`}>
+          <span class="logo__mark" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </span>
+          <span>loosaz</span>
+        </a>
+        <p>
+          Broadcast manager, cybersecurity graduate and chronic tinkerer.
+          Building useful things for the web and Minecraft.
+        </p>
+        <span class="availability"><span class="availability__dot"></span>{site.availability}</span>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="footer__heading">Explore</h2>
+        <ul>
+          {
+            nav.map((item) => (
+              <li>
+                <a class="footer__link" href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="footer__heading">Elsewhere</h2>
+        <ul>
+          {
+            footerSocials.map((social) => (
+              <li>
+                <a
+                  class="footer__link"
+                  href={social.href}
+                  target={social.external ? "_blank" : undefined}
+                  rel={social.external ? "me noopener noreferrer" : undefined}
+                >
+                  {social.name}
+                  <Icon name="arrow-up-right" size={11} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="footer__heading">Say hello</h2>
+        <a class="footer__email" href={`mailto:${site.email}`}>{site.email}</a>
+        <a
+          class="footer__source"
+          href="https://github.com/LooosaZ/loosaz.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="github" size={14} />
+          Source code
+        </a>
+      </div>
+    </div>
+
+    <p class="footer__wordmark" aria-hidden="true">loosaz</p>
+
+    <div class="footer__bottom">
+      <p>© {year} {site.name}. All rights reserved.</p>
+      <p class="footer__cute">
+        <Icon name="sparkle" size={12} />
+        you're cute
+      </p>
+      <a
+        class="footer__top-link"
+        href="#main"
+        aria-label="Back to top"
+      >
+        Back to top
+        <Icon name="arrow-up-right" size={13} />
+      </a>
+    </div>
+  </div>
 </footer>
 
 <style>
-    footer {
-        margin-top: auto;
-        width: 100%;
-        display: flex;
-        justify-content: center;
+  .site-footer {
+    margin-top: clamp(4rem, 8vw, 7rem);
+    border-top: 1px solid var(--line);
+    background: var(--bg-deep);
+    overflow: clip;
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1.6fr 0.7fr 0.7fr 1fr;
+    gap: 2.5rem;
+    padding-block: clamp(3rem, 6vw, 4.5rem) clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+    max-width: 21rem;
+  }
+
+  .footer__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+
+  .logo__mark {
+    display: grid;
+    grid-template-columns: repeat(2, 5px);
+    gap: 2px;
+    transform: rotate(-8deg);
+  }
+
+  .logo__mark span {
+    width: 5px;
+    height: 5px;
+    background: var(--ink);
+    border-radius: 1px;
+  }
+
+  .logo__mark span:nth-child(2) {
+    background: var(--accent);
+  }
+
+  .logo__mark span:nth-child(3) {
+    opacity: 0.35;
+  }
+
+  .footer__brand p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .availability__dot {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2f9e44;
+  }
+
+  .footer__heading {
+    margin-bottom: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .footer__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    transition: color 0.25s var(--ease);
+  }
+
+  .footer__link :global(.icon) {
+    opacity: 0;
+    transform: translate(-3px, 3px);
+    transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+  }
+
+  .footer__link:hover {
+    color: var(--accent-text);
+  }
+
+  .footer__link:hover :global(.icon) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .footer__email {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 3px;
+    transition: color 0.25s var(--ease), text-decoration-color 0.25s var(--ease);
+  }
+
+  .footer__email:hover {
+    color: var(--accent-text);
+    text-decoration-color: var(--accent);
+  }
+
+  .footer__source {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.8125rem;
+    color: var(--muted);
+    transition: color 0.25s var(--ease);
+  }
+
+  .footer__source:hover {
+    color: var(--ink);
+  }
+
+  .footer__wordmark {
+    font-size: clamp(5rem, 19vw, 16rem);
+    font-weight: 600;
+    line-height: 0.72;
+    letter-spacing: -0.07em;
+    color: var(--ink);
+    opacity: 0.045;
+    text-align: center;
+    user-select: none;
+    transform: translateY(0.08em);
+    pointer-events: none;
+  }
+
+  .footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.03em;
+  }
+
+  .footer__cute {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--accent-text);
+  }
+
+  .footer__top-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 0.25s var(--ease);
+  }
+
+  .footer__top-link:hover {
+    color: var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    .footer__top {
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem 2rem;
     }
 
-    p {
-        font-weight: 300;
-        filter: brightness(80%);
-        font-size: 90%;
+    .footer__brand {
+      grid-column: 1 / -1;
     }
+  }
+
+  @media (max-width: 560px) {
+    .footer__top {
+      grid-template-columns: 1fr;
+    }
+
+    .footer__bottom {
+      flex-wrap: wrap;
+    }
+
+    .footer__cute {
+      order: 3;
+      width: 100%;
+    }
+  }
 </style>

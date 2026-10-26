@@ -1,29 +1,25 @@
 {
-    "name": "@example/basics",
-    "type": "module",
-    "version": "0.0.1",
-    "packageManager": "pnpm@9.9.0",
-    "private": true,
-    "scripts": {
-        "dev": "astro dev",
-        "start": "astro dev",
-        "build": "astro build",
-        "preview": "astro preview",
-        "astro": "astro"
-    },
-    "dependencies": {
-        "@astrojs/cloudflare": "^7.7.1",
-        "@astrojs/mdx": "^1.1.5",
-        "@astrojs/svelte": "^4.0.4",
-        "accept-language-parser": "^1.5.0",
-        "astro": "^3.6.0",
-        "normalize.css": "^8.0.1",
-        "svelte": "^4.2.7"
-    },
-    "devDependencies": {
-        "@astrojs/sitemap": "^3.0.3",
-        "@types/accept-language-parser": "^1.5.6",
-        "sass": "^1.69.5",
-        "zod": "^3.22.4"
-    }
+  "name": "loosaz-portfolio",
+  "type": "module",
+  "version": "2.0.0",
+  "private": true,
+  "description": "LoosaZ — broadcast manager, cybersecurity graduate and builder.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "sync:projects": "node scripts/sync-projects.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.6.0",
+    "@fontsource-variable/geist": "^5.2.8",
+    "@fontsource-variable/geist-mono": "^5.2.8",
+    "astro": "^5.16.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "typescript": "^5.9.3"
+  }
 }

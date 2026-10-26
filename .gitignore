@@ -1,6 +1,6 @@
 # build output
 dist/
-.output/
+.astro/
 
 # dependencies
 node_modules/
@@ -11,10 +11,14 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
-# environment variables
+# environment
 .env
 .env.production
 
-# macOS-specific files
+# macOS / Windows
 .DS_Store
+Thumbs.db
+
+# editors
+.vscode/
+.idea/

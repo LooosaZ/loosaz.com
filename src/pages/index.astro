@@ -1,11 +1,794 @@
 ---
-const acceptLanguages = Astro.request.headers.get("Accept-Language");
-if (!acceptLanguages) return Astro.redirect("/en", 302);
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/components/Icon.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import PartnerRow from "@/components/PartnerRow.astro";
+import BroadcastList from "@/components/BroadcastList.astro";
+import TechStack from "@/components/TechStack.astro";
+import ContactCta from "@/components/ContactCta.astro";
+import { site, socials } from "@/data/site";
+import { featuredProjects } from "@/data/projects";
 
-import parser from "accept-language-parser";
-import { Locales } from "../locales";
+const quickSocials = socials.filter((social) =>
+  ["github", "bluesky", "x", "twitch"].includes(social.icon),
+);
 
-const lang = parser.pick(Locales, acceptLanguages) || "en";
-
-return Astro.redirect(`/${lang}`, 302);
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  url: site.url,
+  image: `${site.url}/assets/avatar.jpg`,
+  jobTitle: site.role,
+  description: site.description,
+  email: site.email,
+  sameAs: socials.filter((social) => social.external).map((social) => social.href),
+  knowsAbout: [
+    "Esports broadcast",
+    "Cybersecurity",
+    "Web development",
+    "Minecraft modding",
+  ],
+};
 ---
+
+<BaseLayout jsonLd={jsonLd}>
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__copy">
+        <p class="eyebrow">Broadcast manager · Builder</p>
+
+        <h1>
+          I keep esports<br />
+          <em>on air.</em>
+        </h1>
+
+        <p class="hero__lead">
+          I'm <strong>LoosaZ</strong> — a freelance Global Broadcast Manager for esports
+          and entertainment. I also studied cybersecurity at UTC, make Minecraft mods
+          and build for the open web.
+        </p>
+
+        <div class="btn-row hero__actions">
+          <a class="btn" href="/projects">
+            Explore my work
+            <Icon name="arrow-down" size={16} />
+          </a>
+          <a
+            class="btn btn--ghost"
+            href="https://github.com/LooosaZ"
+            target="_blank"
+            rel="me noopener noreferrer"
+          >
+            <Icon name="github" size={16} />
+            GitHub
+          </a>
+        </div>
+
+        <div class="hero__socials">
+          <span class="hero__socials-label">Find me on</span>
+          <ul>
+            {
+              quickSocials.map((social) => (
+                <li>
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="me noopener noreferrer"
+                    aria-label={social.name}
+                  >
+                    <Icon name={social.icon} size={15} />
+                    {social.name === "X / Twitter" ? "X" : social.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <div class="hero__side">
+        <figure class="portrait">
+          <span class="portrait__badge">
+            <span class="portrait__pulse"></span>
+            {site.availability}
+          </span>
+
+          <div class="portrait__image">
+            <img
+              src="/assets/avatar.jpg"
+              alt="LoosaZ's pixel-art avatar"
+              width="460"
+              height="460"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </div>
+
+          <figcaption class="portrait__caption">
+            <div>
+              <p class="portrait__name">LoosaZ</p>
+              <p class="portrait__role">Global Broadcast Manager</p>
+            </div>
+          </figcaption>
+        </figure>
+
+        <div class="hero__sticker">
+          <Icon name="sparkle" size={14} />
+          <span>Cybersecurity @ UTC</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="partners-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Partners</p>
+          <h2 id="partners-title" class="section-head__title">In good <em>company.</em></h2>
+        </div>
+        <div class="section-head__aside">
+          <p>
+            I've had the chance to work alongside teams across esports, entertainment
+            and content — from global publishers to boutique agencies.
+          </p>
+        </div>
+      </div>
+      <PartnerRow />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="projects-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Selected projects</p>
+          <h2 id="projects-title" class="section-head__title">
+            Built after <em>sign-off.</em>
+          </h2>
+        </div>
+        <div class="section-head__aside">
+          <p>
+            Open-source tools, Minecraft mods and experiments in security. Everything
+            here is public and, more often than not, a little bit nerdy.
+          </p>
+          <a class="link-arrow" href="/projects">
+            All projects
+            <Icon name="arrow-right" size={15} />
+          </a>
+        </div>
+      </div>
+
+      <div class="projects-grid">
+        {
+          featuredProjects.map((project, index) => (
+            <div
+              class:list={[
+                "projects-grid__cell",
+                { "projects-grid__cell--wide": index === 0 || index === 3 },
+              ]}
+            >
+              <ProjectCard project={project} index={index} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="broadcast-title">
+    <div class="container broadcast-layout">
+      <div class="broadcast-intro">
+        <p class="eyebrow">On air</p>
+        <h2 id="broadcast-title" class="broadcast-intro__title">
+          Shows I've helped <em>take live.</em>
+        </h2>
+        <p>
+          A selection of the channels and competitions I've worked with as a Global
+          Broadcast Manager — all on Twitch.
+        </p>
+
+        <div class="broadcast-intro__signal" aria-hidden="true">
+          <span class="broadcast-intro__live">On air</span>
+          <span class="broadcast-intro__bars">
+            <i></i><i></i><i></i><i></i><i></i>
+          </span>
+        </div>
+      </div>
+
+      <BroadcastList />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="stack-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Tech stack</p>
+          <h2 id="stack-title" class="section-head__title">The everyday <em>toolkit.</em></h2>
+        </div>
+        <div class="section-head__aside">
+          <p>
+            Mostly self-taught, always learning. These are the languages and tools I
+            reach for when I'm building something new.
+          </p>
+        </div>
+      </div>
+      <TechStack />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="about-title">
+    <div class="container about-preview">
+      <div class="about-card" data-reveal>
+        <span class="about-card__mark" aria-hidden="true">“</span>
+        <p class="about-card__quote">
+          I like making things that people actually use — on stream and on screen.
+        </p>
+        <div class="about-card__foot">
+          <span>LoosaZ</span>
+          <span>UTC · Cybersecurity</span>
+        </div>
+      </div>
+
+      <div class="about-preview__copy">
+        <p class="eyebrow">About me</p>
+        <h2 id="about-title">
+          Curious by default.<br />
+          <em>Self-taught</em> by choice.
+        </h2>
+        <p>
+          I started programming in early 2022 and have been teaching myself ever since.
+          I studied cybersecurity at UTC, run broadcasts for esports, and build
+          open-source projects whenever inspiration strikes.
+        </p>
+
+        <dl class="facts">
+          <div>
+            <dt>Studied</dt>
+            <dd>Cybersecurity @ UTC</dd>
+          </div>
+          <div>
+            <dt>Coding since</dt>
+            <dd>2022</dd>
+          </div>
+          <div>
+            <dt>Focus</dt>
+            <dd>Broadcast & community</dd>
+          </div>
+          <div>
+            <dt>Off-screen</dt>
+            <dd>Minecraft mods</dd>
+          </div>
+        </dl>
+
+        <a class="link-arrow" href="/about">
+          More about me
+          <Icon name="arrow-right" size={15} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <ContactCta />
+</BaseLayout>
+
+<style>
+  /* Hero ------------------------------------------------------------------ */
+
+  .hero {
+    position: relative;
+    padding-block: clamp(3rem, 7vw, 6rem) clamp(3rem, 6vw, 5rem);
+    overflow: clip;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -12rem;
+    right: -8rem;
+    width: min(44rem, 90vw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 66%);
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 6rem);
+  }
+
+  .hero h1 {
+    margin-block: 1.15rem 1.5rem;
+    font-size: clamp(3rem, 5.8vw, 4.9rem);
+    line-height: 0.94;
+    letter-spacing: -0.055em;
+  }
+
+  .hero h1 em {
+    color: var(--accent-text);
+  }
+
+  .hero__lead {
+    max-width: 32rem;
+    color: var(--muted);
+    font-size: clamp(1.0125rem, 1.35vw, 1.125rem);
+    line-height: 1.68;
+  }
+
+  .hero__lead strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .hero__actions {
+    margin-top: 2rem;
+  }
+
+  .hero__socials {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.4rem;
+    margin-top: 2.25rem;
+    padding-top: 1.35rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .hero__socials-label {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .hero__socials ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+  }
+
+  .hero__socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+    transition: color 0.25s var(--ease);
+  }
+
+  .hero__socials a:hover {
+    color: var(--accent-text);
+  }
+
+  .hero__side {
+    position: relative;
+    justify-self: end;
+    width: min(100%, 23rem);
+  }
+
+  .portrait {
+    position: relative;
+    padding: 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 1.4rem;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    transform: rotate(-1.5deg);
+    transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+  }
+
+  .portrait:hover {
+    transform: rotate(0deg) translateY(-4px);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .portrait__badge {
+    position: absolute;
+    z-index: 3;
+    top: -0.95rem;
+    left: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface-strong);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .portrait__pulse {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2f9e44;
+  }
+
+  .portrait__pulse::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border: 1px solid #2f9e44;
+    border-radius: 50%;
+    opacity: 0.45;
+    animation: pulse 2.4s var(--ease) infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+
+  .portrait__image {
+    overflow: hidden;
+    border-radius: 1rem;
+    background: #f2a64b;
+  }
+
+  .portrait__image img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    image-rendering: pixelated;
+  }
+
+  .portrait__caption {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0.55rem 0.35rem;
+  }
+
+  .portrait__name {
+    font-size: 1.05rem;
+    font-weight: 550;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+  }
+
+  .portrait__role {
+    margin-top: 0.15rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .hero__sticker {
+    position: absolute;
+    right: 0;
+    bottom: -2.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 0.75rem;
+    background: var(--surface-strong);
+    box-shadow: var(--shadow);
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    transform: rotate(2deg);
+  }
+
+  .hero__sticker :global(.icon) {
+    color: var(--accent-text);
+  }
+
+  /* Projects -------------------------------------------------------------- */
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .projects-grid__cell {
+    grid-column: span 5;
+  }
+
+  .projects-grid__cell--wide {
+    grid-column: span 7;
+  }
+
+  /* Broadcast ------------------------------------------------------------- */
+
+  .broadcast-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .broadcast-intro {
+    position: sticky;
+    top: 6.5rem;
+  }
+
+  .broadcast-intro__title {
+    margin-block: 1rem 1.15rem;
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
+  }
+
+  .broadcast-intro p {
+    max-width: 28rem;
+    color: var(--muted);
+  }
+
+  .broadcast-intro__signal {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-top: 2rem;
+  }
+
+  .broadcast-intro__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    border-radius: 4px;
+    background: var(--accent-soft);
+    color: var(--accent-text);
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .broadcast-intro__live::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .broadcast-intro__bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+  }
+
+  .broadcast-intro__bars i {
+    display: block;
+    width: 2px;
+    background: var(--line-strong);
+    border-radius: 1px;
+    animation: bars 1.6s var(--ease) infinite;
+  }
+
+  .broadcast-intro__bars i:nth-child(1) {
+    height: 30%;
+    animation-delay: 0s;
+  }
+  .broadcast-intro__bars i:nth-child(2) {
+    height: 65%;
+    animation-delay: 0.15s;
+  }
+  .broadcast-intro__bars i:nth-child(3) {
+    height: 100%;
+    animation-delay: 0.3s;
+  }
+  .broadcast-intro__bars i:nth-child(4) {
+    height: 55%;
+    animation-delay: 0.45s;
+  }
+  .broadcast-intro__bars i:nth-child(5) {
+    height: 80%;
+    animation-delay: 0.6s;
+  }
+
+  @keyframes bars {
+    0%,
+    100% {
+      transform: scaleY(0.55);
+      opacity: 0.55;
+    }
+    50% {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+  }
+
+  /* About preview --------------------------------------------------------- */
+
+  .about-preview {
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .about-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 23rem;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: #e8481c;
+    color: #1a120d;
+    isolation: isolate;
+  }
+
+  .about-card::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    opacity: 0.5;
+    background-image: linear-gradient(rgba(26, 18, 13, 0.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26, 18, 13, 0.14) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(150deg, #000, transparent 75%);
+    -webkit-mask-image: linear-gradient(150deg, #000, transparent 75%);
+  }
+
+  .about-card__mark {
+    position: absolute;
+    z-index: -1;
+    top: 0.28em;
+    right: 0.22em;
+    font-size: 6.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: rgba(26, 18, 13, 0.17);
+    user-select: none;
+  }
+
+  .about-card__quote {
+    max-width: 22rem;
+    font-size: clamp(1.7rem, 3vw, 2.35rem);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.04em;
+  }
+
+  .about-card__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(26, 18, 13, 0.25);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .about-preview__copy h2 {
+    margin-block: 1rem 1.25rem;
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
+  }
+
+  .about-preview__copy > p {
+    max-width: 34rem;
+    color: var(--muted);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin-block: 1.75rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .facts > div {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .facts > div:nth-child(odd) {
+    padding-right: 1rem;
+  }
+
+  .facts dt {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .facts dd {
+    margin-top: 0.15rem;
+    font-size: 0.875rem;
+    font-weight: 450;
+    letter-spacing: -0.01em;
+  }
+
+  /* Responsive ------------------------------------------------------------ */
+
+  @media (max-width: 980px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .hero__side {
+      justify-self: start;
+      width: min(100%, 22rem);
+      margin-top: 1rem;
+    }
+
+    .hero__sticker {
+      right: -0.5rem;
+    }
+
+    .broadcast-layout,
+    .about-preview {
+      grid-template-columns: 1fr;
+    }
+
+    .broadcast-intro {
+      position: static;
+    }
+
+    .about-card {
+      min-height: 19rem;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .projects-grid__cell,
+    .projects-grid__cell--wide {
+      grid-column: span 1;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero__socials {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .hero__sticker {
+      position: static;
+      margin-top: 0.9rem;
+      transform: none;
+      width: fit-content;
+    }
+  }
+</style>
