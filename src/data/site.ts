@@ -27,12 +27,12 @@ export interface StackGroup {
 
 export const site = {
   name: "LoosaZ",
-  url: "https://loosaz.com",
+  url: "https://www.loosaz.com",
   email: "contact@loosaz.com",
   role: "Freelance Global Broadcast Manager",
   title: "LoosaZ — Broadcast manager & builder",
   description:
-    "LoosaZ is a freelance Global Broadcast Manager for esports and entertainment, a cybersecurity graduate from UTC, and a builder of open-source projects.",
+    "LoosaZ is a freelance Global Broadcast Manager for esports and entertainment, a cybersecurity graduate from UTP, and a builder of open-source projects.",
   availability: "Open to freelance work",
   since: 2022,
 } as const;
