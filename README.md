@@ -92,45 +92,6 @@ scripts/
 
 The palette lives in `:root` and `:root[data-theme="dark"]` in `src/styles/global.css`. The toggle persists to `localStorage`; the chosen theme is applied before paint to avoid a flash. Add `?theme=light` or `?theme=dark` to any URL to preview a theme without changing the saved preference.
 
-## Deployment (GitHub Pages)
-
-The site deploys automatically with GitHub Actions on every push to `main` (or `master`). The workflow lives in [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) and uses `withastro/action` + `actions/deploy-pages`.
-
-### First-time setup
-
-1. Create the repository on GitHub and push this folder:
-
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/<user>/<repo>.git
-   git push -u origin main
-   ```
-
-2. In the repository, go to **Settings → Pages** and set **Source** to **GitHub Actions**.
-3. Under **Custom domain**, enter `loosaz.com` and save, then enable **Enforce HTTPS** once the certificate is issued.
-
-The custom domain is also pinned by [`public/CNAME`](public/CNAME), which is copied into `dist/` at build time, so it survives every deploy.
-
-### DNS records
-
-At your DNS provider, point the apex domain at GitHub Pages and `www` at your Pages hostname:
-
-| Type  | Name | Value                     |
-| ----- | ---- | ------------------------- |
-| A     | @    | `185.199.108.153`         |
-| A     | @    | `185.199.109.153`         |
-| A     | @    | `185.199.110.153`         |
-| A     | @    | `185.199.111.153`         |
-| AAAA  | @    | `2606:50c0:8000::153`     |
-| AAAA  | @    | `2606:50c0:8001::153`     |
-| AAAA  | @    | `2606:50c0:8002::153`     |
-| AAAA  | @    | `2606:50c0:8003::153`     |
-| CNAME | www  | `<user>.github.io`        |
-
-DNS changes can take a while to propagate; GitHub provisions the TLS certificate automatically afterwards.
-
 ### Notes
 
 - `site` in [`astro.config.mjs`](astro.config.mjs) is set to `https://loosaz.com` so canonical URLs, Open Graph tags and the sitemap all use the custom domain. If the domain ever changes, update it there and in [`public/robots.txt`](public/robots.txt).
